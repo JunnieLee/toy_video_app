@@ -13,6 +13,7 @@ import YTSearch from 'youtube-api-search';
 import SearchBar from './components/search_bar';
 // 우리가 직접 만든 파일이면 이렇게 파일의 상대주소를 적어줘야 함.
 // 반면, npm을 통해서 install한 package라면, 그냥 'react', 'react-dom' 같이 곧바로 불러올 수 있음!
+import VideoList from './components/video_list';
 
 
 const API_KEY = 'AIzaSyAjoXigmpTsicn5xGrpTT-xtUKZ1eg0GbY';
@@ -45,6 +46,10 @@ class App extends Component {
 		return (
 			<div>
 				<SearchBar /> {/* functional component는 이렇게 class-based component를 contain할 수 있음!*/}
+				<VideoList videos={this.state.videos} /> 
+						  {/* 부모 컴포넌트인 App에서 자식 컴포넌트인 VideoList로 데이터를 전달해야 함.
+				              그러기 위해선 저렇게 VideoList의 JSX태그 위에 property를 정의하면 됨! */}
+				    	{/* 지금 App에서 VideoList로 전달되는 데이터는 videos 프로퍼티를 통해 참조가 됨 */}      
 			</div>
 		);
 	}
