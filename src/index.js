@@ -35,24 +35,26 @@ class App extends Component {
 		};
 		// (1) 일단 state에 video를 빈 array로 세팅함.
 
-		// 기본적으로 이와같이 configuration option과 call-back function을 넘김
-		YTSearch({key: API_KEY, term: 'Ariana Grande'}, (videos) => {
+		this.videoSearch('Ariana Grande'); 
+	}
+
+	// search를 가능하게 하는 함수를 따로 만들어서 빼줬음!
+	videoSearch(term) {		
+		YTSearch({key: API_KEY, term: term}, (videos) => {
 			this.setState({ 
 				videos: videos,
 				selectedVideo: videos[0] // selectedVideo 초기값은 첫번째 비디오로! 
 			}); 
 		});  
-
-		// (2) 컴포넌트가 렌더링되면서 검색을 실행하고, 검색이 완료되면, 
-		//     비디오값들을 해당 search term에 따라 업데이트 할 것임! 
-		//-------> 처음 딱 페이지 들어왔을때 디폴트 값 설정해주기 위해 이렇게 해놓은거!
 	}
+
 
 	// class-based component에서 필수적으로 있어야 하는 render 메소드~!
 	render(){
 		return (
 			<div>
-				<SearchBar /> {/* functional component는 이렇게 class-based component를 contain할 수 있음!*/}
+				{/* functional component는 이렇게 class-based component를 contain할 수 있음!*/}
+				<SearchBar onSearchTermChange={term => this.videoSearch(term)} />
 				<VideoDetail video={this.state.selectedVideo}/>
 				<VideoList 
 					onVideoSelect={selectedVideo => this.setState({selectedVideo}) } //call-back function

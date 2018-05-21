@@ -30,24 +30,26 @@ class SearchBar extends Component {
 			     // whenever the input changes, the onChange function will be called
 		         // 이 onChange는 리액트로 사전에 정의된 특수한 프로퍼티임.
 		return (	
-			<div>				
+			<div className="search-bar">				
 				<input 	//JSX나 javascript variable을 참조할때마다 항상 이렇게 {}로 감싸줘야 함!
 					value={this.state.term} 
 					// 업데이트된 state값을 받아와 component를 제어함 _ controlled field
-					onChange={event => this.setState({ term: event.target.value })} 
-										// constructor 메소드 밖에선 오로지 이렇게 
-										// this.setState를 통해서만 state manipulating이 가능!
-						// this.setState를 통해 state값이 update되면 component 전체가 re-render됨
-						// -> 그리고 이 rendering method의 모든 업데이트 된 정보를 DOM에 push함
-				/>				
+					onChange={event => this.onInputChange(event.target.value)} />										
 			</div>
-			);				         			 
-		                
+			);				         			 		                
 	} 
 
 	// *event handler -> event가 발생할때마다 이를 감지함
 	// event handler에 pass되는 argument는 event가 발생하는 것에 대한 정보나 context를 의미.
 	// 그리고 그 argument로 event 발생여부 및 관련정보를 받고, 그걸 활용해 무언가 기능하게 할 수 있음!
+
+	// 위 onChange에서 전달된 event.target.value가 term인자로 들어오게 되겠지!
+	onInputChange(term) {
+		this.setState({term}); // 얜 지금 이 컴포넌트의 state 'term'의 내용을 업데이트시켜주기 위해서
+		this.props.onSearchTermChange(term); 
+		// 얜 부모 컴포넌트 index.js에 정의된 onSearchTermChange함수에 term 정보를 전해주기 위해서 (callback)
+	}
+
 }
 
 // export default는 이 파일에서 요 특정한 애만큼은 항상 export 가능하게 설정해놓을때 씀!
