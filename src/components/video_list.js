@@ -10,14 +10,21 @@ const VideoList = (props) => {
 	
 	// index.js의 App component (parent component)로부터 가져온 state data를 
 	// videos라는 property에 담아왔었지! props 오브젝트에 있는 해당 property를 이렇게 끄집어내 사용!
+
 	const videoItems = props.videos.map((video) => {
-		return <VideoListItem key={video.etag} video={video} /> 
+		return (
+			<VideoListItem
+				onVideoSelect={props.onVideoSelect} 
+				key={video.etag} 
+				video={video} /> // app으로부터 가져온 props 각 프로퍼티 정보를 VideoListItem으로 전달	
+		); 
 		// this would return an array of components
 	}); 
 	// "map"
 	// (ex) var array = [1, 2, 3];
 		// array.map(function(number) {return number * 2}); 
 		//--> output: [2, 4, 6]
+
 	
 
 	return (

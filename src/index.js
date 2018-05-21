@@ -14,6 +14,7 @@ import SearchBar from './components/search_bar';
 // 우리가 직접 만든 파일이면 이렇게 파일의 상대주소를 적어줘야 함.
 // 반면, npm을 통해서 install한 package라면, 그냥 'react', 'react-dom' 같이 곧바로 불러올 수 있음!
 import VideoList from './components/video_list';
+
 import VideoDetail from './components/video_detail';
 
 const API_KEY = 'AIzaSyAjoXigmpTsicn5xGrpTT-xtUKZ1eg0GbY';
@@ -28,13 +29,19 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { videos: [] };
+		this.state = { 
+			videos: [],
+			selectedVideo: null 
+		};
 		// (1) 일단 state에 video를 빈 array로 세팅함.
 
 		// 기본적으로 이와같이 configuration option과 call-back function을 넘김
 		YTSearch({key: API_KEY, term: 'Ariana Grande'}, (videos) => {
-			this.setState({ videos }); // = this.setState({ videos: videos });
-		});  // ES6 syntatic sugar -> only works when 키와 value변수의 이름이 같을 때!
+			this.setState({ 
+				videos: videos,
+				selectedVideo: videos[0] // selectedVideo 초기값은 첫번째 비디오로! 
+			}); 
+		});  
 
 		// (2) 컴포넌트가 렌더링되면서 검색을 실행하고, 검색이 완료되면, 
 		//     비디오값들을 해당 search term에 따라 업데이트 할 것임! 
@@ -46,8 +53,12 @@ class App extends Component {
 		return (
 			<div>
 				<SearchBar /> {/* functional component는 이렇게 class-based component를 contain할 수 있음!*/}
-				<VideoDetail video={this.state.videos[0]}/>
-				<VideoList videos={this.state.videos} /> 
+				<VideoDetail video={this.state.selectedVideo}/>
+				<VideoList 
+					onVideoSelect={selectedVideo => this.setState({selectedVideo}) } //call-back function
+					// 상위 컴포넌트의 state를 조정할 수 있는 하나의 콜백함수를 자식요소에 전달했음
+					// 이렇게 콜백 함수를 이용하는건, 자식요소와 부모요소가 원활히 소통할 수 있는 훌륭한 수단임!
+					videos={this.state.videos} /> 
 						  {/* 부모 컴포넌트인 App에서 자식 컴포넌트인 VideoList로 데이터를 전달해야 함.
 				              그러기 위해선 저렇게 VideoList의 JSX태그 위에 property를 정의하면 됨! */}
 				    	{/* 지금 App에서 VideoList로 전달되는 데이터는 videos 프로퍼티를 통해 참조가 됨 */}      
