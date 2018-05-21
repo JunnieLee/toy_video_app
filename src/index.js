@@ -1,3 +1,6 @@
+import _ from 'lodash';
+// 함수 호출 시간을 조정하기 위한 외부 라이브러리 설치~
+
 import React, { Component } from 'react';
 // React.Component를 갖다 쓰기 위해 { Component } 와 같은 식으로 import 구문 작성해줬음!
 // 이건 마치 const Component = React.Component; 라고 해준것과도 같음!!
@@ -51,10 +54,16 @@ class App extends Component {
 
 	// class-based component에서 필수적으로 있어야 하는 render 메소드~!
 	render(){
+		const videoSearch = _.debounce((term) => { this.videoSearch(term) }, 300);
+						   // from 'lodash'	    // 이 함수 는 매 300밀리 초 마다 호출될 수 있음
+						   						// 우리가 원할 때 언제든 호출가능하긴 한데
+						   						// 그 호출 간격이 300밀리 초 이하가 되면 안되는거
+						// 얘를 통해서 이제 searchbar은 원하는 주기대로 검색결과를 가져올 수 있게 된 것!
+						// (너무 자주 검색되지 않도록)					
 		return (
 			<div>
 				{/* functional component는 이렇게 class-based component를 contain할 수 있음!*/}
-				<SearchBar onSearchTermChange={term => this.videoSearch(term)} />
+				<SearchBar onSearchTermChange={videoSearch} />
 				<VideoDetail video={this.state.selectedVideo}/>
 				<VideoList 
 					onVideoSelect={selectedVideo => this.setState({selectedVideo}) } //call-back function
